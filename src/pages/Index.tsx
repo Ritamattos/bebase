@@ -2,8 +2,29 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, Shield, Users, Heart, Zap } from "lucide-react";
+import { useEffect } from "react";
 
 const Index = () => {
+  useEffect(() => {
+    // Load Hotmart script
+    const script = document.createElement('script');
+    script.src = 'https://checkout.hotmart.com/lib/hotmart-checkout-elements.js';
+    script.async = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      // Initialize Hotmart checkout after script loads
+      if (window.checkoutElements) {
+        window.checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel');
+      }
+    };
+
+    return () => {
+      // Cleanup script on component unmount
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header com urgência */}
@@ -140,16 +161,13 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Área para código da Hotmart */}
-        <div className="text-center">
-          <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 mb-4">
-            <p className="text-gray-600 mb-4 font-semibold">BOTÃO DE COMPRA DA HOTMART</p>
-            <p className="text-sm text-gray-500">
-              (Inserir aqui o código do botão de compra da Hotmart para o produto de R$29,90)
-            </p>
+        {/* Área do código da Hotmart */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center">
+            <div id="hotmart-sales-funnel" className="w-full max-w-md"></div>
           </div>
           
-          <p className="text-sm text-gray-500 max-w-md mx-auto">
+          <p className="text-sm text-gray-500 max-w-md mx-auto mt-4">
             Pagamento 100% seguro processado pela Hotmart. Aceitamos cartão de crédito, PIX e boleto bancário.
           </p>
         </div>
