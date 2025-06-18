@@ -1,8 +1,18 @@
-
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, Shield, Users, Heart, Zap, Gift } from "lucide-react";
 import { useEffect } from "react";
+
+// Declaração para TypeScript
+declare global {
+  interface Window {
+    checkoutElements: {
+      init: (type: string) => {
+        mount: (selector: string) => void;
+      };
+    };
+  }
+}
 
 const Index = () => {
   useEffect(() => {
@@ -21,7 +31,9 @@ const Index = () => {
 
     return () => {
       // Cleanup script on component unmount
-      document.head.removeChild(script);
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
     };
   }, []);
 
